@@ -34,6 +34,36 @@ export default class PlayScene extends Phaser.Scene {
       .body.setBounce(1, 1)
       .setCollideWorldBounds(true);
 
+    // Paddle 1 (Human player)
+    this.paddle1 = this.add.rectangle(
+      40,
+      gameConfig.height / 2,
+      20,
+      100,
+      0xffffff
+    );
+
+    // Paddle 2 (AI player)
+    this.paddle2 = this.add.rectangle(
+      gameConfig.width - 40,
+      gameConfig.height / 2,
+      20,
+      100,
+      0xffffff
+    );
+
+    // Add paddles to physics group
+    this.paddles = this.physics.add
+      .staticGroup()
+      .addMultiple([this.paddle1, this.paddle2]);
+
+    // Ball-paddle collision detection
+    this.physics.add.collider(
+      this.ball,
+      this.paddles,
+      this.onBallPaddleCollision
+    );
+
     this.serve();
   }
 
@@ -42,6 +72,8 @@ export default class PlayScene extends Phaser.Scene {
     const ballVector = this.getStartingVector();
     this.ball.body.setVelocity(ballVector.x, ballVector.y);
   }
+
+  onBallPaddleCollision() {}
 
   update() {}
 
