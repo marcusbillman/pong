@@ -1,46 +1,33 @@
-import Phaser from 'phaser';
+import Phaser from "phaser";
+import gameConfig from "./gameConfig";
 
 export default class PlayScene extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super({
-      key: 'play',
+      key: "play",
       physics: {
         arcade: {
-          gravity: { y: 300 },
-          debug: false
-        }
-      }
+          debug: false,
+        },
+      },
     });
   }
 
-  create () {
-    this.add.image(400, 300, 'space');
-
-    var emitter = this.add.particles('red')
-      .createEmitter({
-        speed: 100,
-        scale: { start: 1, end: 0 },
-        blendMode: 'ADD'
-      });
-
-    var logo = this.physics.add.image(400, 100, 'logo')
-      .setVelocity(100, 200)
+  create() {
+    // Ball
+    let ball = this.add.rectangle(
+      gameConfig.width / 2,
+      gameConfig.height / 2,
+      20,
+      20,
+      0xffffff
+    );
+    this.physics.add
+      .existing(ball)
+      .body.setVelocity(200, 100) // TODO: Randomize velocity
       .setBounce(1, 1)
       .setCollideWorldBounds(true);
-
-    emitter.startFollow(logo);
-
-    this.input.keyboard
-      .on('keydown-R', function () {
-        this.scene.restart();
-      }, this)
-      .on('keydown-Q', function () {
-        this.scene.stop().run('menu');
-      }, this)
-      .on('keydown-K', function () {
-        this.scene.stop().run('end');
-      }, this);
   }
 
-  update () {}
+  update() {}
 }
