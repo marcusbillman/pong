@@ -13,6 +13,12 @@ export default class PlayScene extends Phaser.Scene {
     });
   }
 
+  state = {
+    player1Score: 0,
+    player2Score: 0,
+    lastWinner: 1,
+  };
+
   create() {
     // Ball
     let ball = this.add.rectangle(
