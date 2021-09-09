@@ -21,21 +21,26 @@ export default class PlayScene extends Phaser.Scene {
 
   create() {
     // Ball
-    let ball = this.add.rectangle(
+    this.ball = this.add.rectangle(
       gameConfig.width / 2,
-      this.getStartingY(),
+      -Infinity,
       20,
       20,
       0xffffff
     );
 
-    const ballVector = this.getStartingVector();
-
     this.physics.add
-      .existing(ball)
-      .body.setVelocity(ballVector.x, ballVector.y)
-      .setBounce(1, 1)
+      .existing(this.ball)
+      .body.setBounce(1, 1)
       .setCollideWorldBounds(true);
+
+    this.serve();
+  }
+
+  serve() {
+    this.ball.y = this.getStartingY();
+    const ballVector = this.getStartingVector();
+    this.ball.body.setVelocity(ballVector.x, ballVector.y);
   }
 
   update() {}
