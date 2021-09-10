@@ -103,6 +103,7 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   serve() {
+    this.ball.x = gameConfig.width / 2;
     this.ball.y = this.getStartingY();
     const ballVector = this.getStartingVector();
     this.ball.body.setVelocity(ballVector.x, ballVector.y);
@@ -112,6 +113,15 @@ export default class PlayScene extends Phaser.Scene {
 
   onBallGoalCollision(ball, goal) {
     ball.body.stop();
+    if (ball.x > gameConfig.width / 2) {
+      this.state.player1Score++;
+      this.state.lastWinner = 1;
+    } else {
+      this.state.player2Score++;
+      this.state.lastWinner = 2;
+    }
+    console.log(this.state);
+    this.time.delayedCall(1000, this.serve, null, this);
   }
 
   update() {
