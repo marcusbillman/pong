@@ -68,6 +68,33 @@ export default class PlayScene extends Phaser.Scene {
       this.onBallPaddleCollision
     );
 
+    // Goal 1
+    this.goal1 = this.add
+      .rectangle(-this.ball.width, 0, 1, gameConfig.height)
+      .setOrigin(1, 0);
+
+    // Goal 2
+    this.goal2 = this.add
+      .rectangle(gameConfig.width + this.ball.width, 0, 1, gameConfig.height)
+      .setOrigin(0, 0);
+
+    // Add goals to physics group
+    this.goals = this.physics.add
+      .staticGroup()
+      .addMultiple([this.goal1, this.goal2]);
+
+    // Ball-goal collision detection
+    this.physics.add.collider(
+      this.ball,
+      this.goals,
+      this.onBallGoalCollision,
+      null,
+      this
+    );
+
+    // Ball should only collide with top and bottom world bounds
+    this.physics.world.setBoundsCollision(false, false, true, true);
+
     // Set up keyboard input
     this.keys = this.input.keyboard.addKeys("up, down, w, s, r");
 
@@ -82,6 +109,10 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   onBallPaddleCollision() {}
+
+  onBallGoalCollision(ball, goal) {
+    ball.body.stop();
+  }
 
   update() {
     if (this.keys.up.isDown || this.keys.w.isDown) {
