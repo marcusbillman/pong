@@ -124,13 +124,26 @@ export default class PlayScene extends Phaser.Scene {
     this.time.delayedCall(1000, this.serve, null, this);
   }
 
-  update() {
+  update(time) {
     if (this.keys.up.isDown || this.keys.w.isDown) {
       this.paddle1.body.setVelocityY(-500);
     } else if (this.keys.down.isDown || this.keys.s.isDown) {
       this.paddle1.body.setVelocityY(500);
     } else {
       this.paddle1.body.setVelocityY(0);
+    }
+
+    // "AI" for paddle 2 movement
+    if (this.ball.body.velocity.x > 0 && time % 200 < 10) {
+      let distanceY = this.paddle2.y - this.ball.y;
+      let distanceThreshold = Math.random() * 50 + 30;
+      if (distanceY > distanceThreshold) {
+        this.paddle2.body.setVelocityY(-500);
+      } else if (distanceY < -distanceThreshold) {
+        this.paddle2.body.setVelocityY(500);
+      } else {
+        this.paddle2.body.setVelocityY(0);
+      }
     }
 
     // Reset key for debugging
