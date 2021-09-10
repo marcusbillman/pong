@@ -54,8 +54,12 @@ export default class PlayScene extends Phaser.Scene {
 
     // Add paddles to physics group
     this.paddles = this.physics.add
-      .staticGroup()
+      .group()
       .addMultiple([this.paddle1, this.paddle2]);
+
+    this.paddles.getChildren().forEach((paddle) => {
+      paddle.body.setImmovable(true).setCollideWorldBounds(true);
+    });
 
     // Ball-paddle collision detection
     this.physics.add.collider(
@@ -64,6 +68,10 @@ export default class PlayScene extends Phaser.Scene {
       this.onBallPaddleCollision
     );
 
+    // Set up keyboard input
+    this.keys = this.input.keyboard.addKeys("up, down, w, s");
+
+    // Serve ball (start round)
     this.serve();
   }
 
@@ -75,7 +83,15 @@ export default class PlayScene extends Phaser.Scene {
 
   onBallPaddleCollision() {}
 
-  update() {}
+  update() {
+    if (this.keys.up.isDown || this.keys.w.isDown) {
+      this.paddle1.body.setVelocityY(-500);
+    } else if (this.keys.down.isDown || this.keys.s.isDown) {
+      this.paddle1.body.setVelocityY(500);
+    } else {
+      this.paddle1.body.setVelocityY(0);
+    }
+  }
 
   getStartingY() {
     return Math.random() * gameConfig.height;
