@@ -65,7 +65,9 @@ export default class PlayScene extends Phaser.Scene {
     this.physics.add.collider(
       this.ball,
       this.paddles,
-      this.onBallPaddleCollision
+      this.onBallPaddleCollision,
+      null,
+      this
     );
 
     // Goal 1
@@ -109,7 +111,28 @@ export default class PlayScene extends Phaser.Scene {
     this.ball.body.setVelocity(ballVector.x, ballVector.y);
   }
 
-  onBallPaddleCollision() {}
+  onBallPaddleCollision(ball, paddle) {
+    // Calculate the fraction, which represents where on the paddle the ball collided
+    // 0 is at the top of the paddle, 1 is at the bottom
+    let distanceFromCenter = ball.y - paddle.y;
+    let distanceFromTop = distanceFromCenter + paddle.height / 2;
+    let fraction = distanceFromTop / paddle.height;
+
+    // Get the old velocity vector and calculate the speed using the distance formula
+    const oldVelocity = ball.body.velocity;
+    const speed = Math.sqrt(oldVelocity.x ** 2 + oldVelocity.y ** 2);
+
+    // Calculate the new angle between -45 and 45 degrees depending on the fraction
+    // Flip the angle horizontally if bouncing on the right paddle
+    let newAngle = fraction * 90 - 45;
+    if (ball.x > gameConfig.width / 2) {
+      newAngle = -180 - newAngle;
+    }
+
+    // Get the new velocity using the new angle and the same speed as before the bounce
+    let newVelocity = this.physics.velocityFromAngle(newAngle, speed);
+    ball.body.setVelocity(newVelocity.x, newVelocity.y);
+  }
 
   onBallGoalCollision(ball, goal) {
     ball.body.stop();
@@ -160,5 +183,12 @@ export default class PlayScene extends Phaser.Scene {
     const y = Math.random() * 800 - 400;
 
     return { x, y };
+  }
+
+  getRotatedVector(vector, radians) {
+    let result = {};
+    result.x = vector.x * Math.cos(radians) - vector.y * Math.sin(radians);
+    result.y = vector.x * Math.sin(radians) + vector.y * Math.cos(radians);
+    return result;
   }
 }
