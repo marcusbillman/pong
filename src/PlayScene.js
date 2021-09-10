@@ -69,7 +69,7 @@ export default class PlayScene extends Phaser.Scene {
     );
 
     // Set up keyboard input
-    this.keys = this.input.keyboard.addKeys("up, down, w, s");
+    this.keys = this.input.keyboard.addKeys("up, down, w, s, r");
 
     // Serve ball (start round)
     this.serve();
@@ -91,6 +91,9 @@ export default class PlayScene extends Phaser.Scene {
     } else {
       this.paddle1.body.setVelocityY(0);
     }
+
+    // Reset key for debugging
+    if (this.keys.r.isDown) this.scene.restart();
   }
 
   getStartingY() {
