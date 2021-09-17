@@ -113,6 +113,11 @@ export default class PlayScene extends Phaser.Scene {
       align: "center",
     });
 
+    // Create background
+    this.net = this.add
+      .tileSprite(gameConfig.width / 2, 0, 2, gameConfig.height, "net")
+      .setOrigin(0.5, 0);
+
     // Set up keyboard input
     this.keys = this.input.keyboard.addKeys("up, down, w, s, r");
 
