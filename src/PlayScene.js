@@ -146,7 +146,7 @@ export default class PlayScene extends Phaser.Scene {
     }
 
     // Get the new velocity using the new angle and the same speed as before the bounce
-    let newVelocity = this.physics.velocityFromAngle(newAngle, speed);
+    let newVelocity = this.physics.velocityFromAngle(newAngle, speed * 1.05);
     ball.body.setVelocity(newVelocity.x, newVelocity.y);
   }
 
@@ -205,7 +205,7 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   getStartingVector() {
-    let x = Math.random() * 200 + 200;
+    let x = Math.random() * 200 + 300;
     if (this.state.lastWinner === 2) x *= -1;
     const y = Math.random() * 800 - 400;
 
