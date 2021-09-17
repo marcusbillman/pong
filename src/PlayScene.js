@@ -97,6 +97,22 @@ export default class PlayScene extends Phaser.Scene {
     // Ball should only collide with top and bottom world bounds
     this.physics.world.setBoundsCollision(false, false, true, true);
 
+    // Score counter text 1
+    this.scoreText1 = this.add.text(0, 50, "0", {
+      fontFamily: '"Press Start 2P", sans-serif',
+      fontSize: 64,
+      fixedWidth: gameConfig.width / 2,
+      align: "center",
+    });
+
+    // Score counter text 2
+    this.scoreText2 = this.add.text(gameConfig.width / 2, 50, "0", {
+      fontFamily: '"Press Start 2P", sans-serif',
+      fontSize: 64,
+      fixedWidth: gameConfig.width / 2,
+      align: "center",
+    });
+
     // Set up keyboard input
     this.keys = this.input.keyboard.addKeys("up, down, w, s, r");
 
@@ -143,6 +159,8 @@ export default class PlayScene extends Phaser.Scene {
       this.state.player2Score++;
       this.state.lastWinner = 2;
     }
+    this.scoreText1.setText(this.state.player1Score);
+    this.scoreText2.setText(this.state.player2Score);
     console.log(this.state);
     this.time.delayedCall(1000, this.serve, null, this);
   }
