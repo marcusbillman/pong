@@ -162,7 +162,16 @@ export default class PlayScene extends Phaser.Scene {
     this.scoreText1.setText(this.state.player1Score);
     this.scoreText2.setText(this.state.player2Score);
     console.log(this.state);
-    this.time.delayedCall(1000, this.serve, null, this);
+
+    // Check if a player has won, otherwise serve a new ball
+    if (
+      Math.max(this.state.player1Score, this.state.player2Score) >=
+      gameConfig.maxScore
+    ) {
+      this.scene.start("menu", this.state);
+    } else {
+      this.time.delayedCall(1000, this.serve, null, this);
+    }
   }
 
   update(time) {
