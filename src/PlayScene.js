@@ -183,9 +183,9 @@ export default class PlayScene extends Phaser.Scene {
 
   update(time, delta) {
     if (this.keys.up.isDown || this.keys.w.isDown) {
-      this.paddle1.body.setVelocityY(-500);
+      this.paddle1.body.setVelocityY(-gameConfig.paddleSpeed);
     } else if (this.keys.down.isDown || this.keys.s.isDown) {
-      this.paddle1.body.setVelocityY(500);
+      this.paddle1.body.setVelocityY(gameConfig.paddleSpeed);
     } else {
       this.paddle1.body.setVelocityY(0);
     }
@@ -201,9 +201,9 @@ export default class PlayScene extends Phaser.Scene {
             (gameConfig.ai.maxThreshold - gameConfig.ai.minThreshold) +
           gameConfig.ai.minThreshold;
         if (distanceY > distanceThreshold) {
-          this.paddle2.body.setVelocityY(-500);
+          this.paddle2.body.setVelocityY(-gameConfig.paddleSpeed);
         } else if (distanceY < -distanceThreshold) {
-          this.paddle2.body.setVelocityY(500);
+          this.paddle2.body.setVelocityY(gameConfig.paddleSpeed);
         } else {
           this.paddle2.body.setVelocityY(0);
         }

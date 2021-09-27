@@ -16,6 +16,7 @@ export default {
   },
   scene: [BootScene, MenuScene, PlayScene, EndScene],
   maxScore: 11,
+  paddleSpeed: 700,
   ai: {
     frequency: 10,
     minThreshold: 30,
