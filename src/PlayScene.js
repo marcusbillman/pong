@@ -123,6 +123,8 @@ export default class PlayScene extends Phaser.Scene {
 
     // Serve ball (start round)
     this.serve();
+
+    this.pendingAiUpdates = 0;
   }
 
   serve() {
@@ -179,7 +181,7 @@ export default class PlayScene extends Phaser.Scene {
     }
   }
 
-  update(time) {
+  update(time, delta) {
     if (this.keys.up.isDown || this.keys.w.isDown) {
       this.paddle1.body.setVelocityY(-500);
     } else if (this.keys.down.isDown || this.keys.s.isDown) {
@@ -188,17 +190,25 @@ export default class PlayScene extends Phaser.Scene {
       this.paddle1.body.setVelocityY(0);
     }
 
+    this.pendingAiUpdates += delta * (gameConfig.ai.frequency / 1000);
+
     // "AI" for paddle 2 movement
-    if (this.ball.body.velocity.x > 0 && time % 200 < 10) {
-      let distanceY = this.paddle2.y - this.ball.y;
-      let distanceThreshold = Math.random() * 50 + 30;
-      if (distanceY > distanceThreshold) {
-        this.paddle2.body.setVelocityY(-500);
-      } else if (distanceY < -distanceThreshold) {
-        this.paddle2.body.setVelocityY(500);
-      } else {
-        this.paddle2.body.setVelocityY(0);
+    while (this.pendingAiUpdates > 1) {
+      if (this.ball.body.velocity.x > 0) {
+        let distanceY = this.paddle2.y - this.ball.y;
+        let distanceThreshold =
+          Math.random() *
+            (gameConfig.ai.maxThreshold - gameConfig.ai.minThreshold) +
+          gameConfig.ai.minThreshold;
+        if (distanceY > distanceThreshold) {
+          this.paddle2.body.setVelocityY(-500);
+        } else if (distanceY < -distanceThreshold) {
+          this.paddle2.body.setVelocityY(500);
+        } else {
+          this.paddle2.body.setVelocityY(0);
+        }
       }
+      this.pendingAiUpdates--;
     }
 
     // Reset key for debugging
