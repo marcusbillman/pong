@@ -113,6 +113,30 @@ export default class PlayScene extends Phaser.Scene {
       align: "center",
     });
 
+    // Instruction text
+    this.instructionText1 = this.add
+      .text(60, gameConfig.height - 50, "UP/DOWN or W/S", {
+        fontFamily: '"Press Start 2P", sans-serif',
+        fontSize: 16,
+        fill: "#666666",
+      })
+      .setDepth(-1);
+
+    // Instruction text
+    this.instructionText2 = this.add
+      .text(
+        gameConfig.width - 60,
+        gameConfig.height - 50,
+        "Computer opponent",
+        {
+          fontFamily: '"Press Start 2P", sans-serif',
+          fontSize: 16,
+          fill: "#666666",
+        }
+      )
+      .setOrigin(1, 0)
+      .setDepth(-1);
+
     // Create background
     this.net = this.add
       .tileSprite(gameConfig.width / 2, 0, 2, gameConfig.height, "net")
@@ -169,6 +193,9 @@ export default class PlayScene extends Phaser.Scene {
     this.scoreText1.setText(this.state.player1Score);
     this.scoreText2.setText(this.state.player2Score);
     console.log(this.state);
+
+    this.instructionText1.setVisible(false);
+    this.instructionText2.setVisible(false);
 
     // Check if a player has won, otherwise serve a new ball
     if (
